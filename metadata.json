@@ -1,0 +1,7 @@
+{
+  "name": "ZYNORA - Cinematic Event Experience",
+  "description": "A high-end, immersive cinematic homepage for the ZYNORA college event, featuring movie-inspired sections, motion design, and interactive storytelling.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
