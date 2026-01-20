@@ -193,6 +193,7 @@ interface RawSiteData {
 // Transformed data for frontend consumption
 export interface SiteData {
   heroContent: HeroContent | null;
+  heroTaglines: HeroTagline[];
   aboutContent: AboutContent | null;
   onboardingContent: {
     id: string;
