@@ -85,3 +85,13 @@ export interface GalleryImage {
   is_featured?: boolean;
   created_at: string;
 }
+
+// Hero Tagline type (rotating taglines in hero section)
+export interface HeroTagline {
+  id: string;
+  tagline_text: string;
+  order: number;
+  is_active: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
