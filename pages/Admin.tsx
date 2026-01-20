@@ -60,6 +60,7 @@ const Admin: React.FC = () => {
 
   // Fetch data from Supabase
   const { data: heroContent, loading: heroLoading, refetch: refetchHero } = useHeroContent();
+  const { data: heroTaglines, loading: taglinesLoading, refetch: refetchTaglines } = useHeroTaglines();
   const { data: aboutContent, loading: aboutLoading, refetch: refetchAbout } = useAboutContent();
   const { data: statistics, loading: statsLoading, refetch: refetchStats } = useStatistics();
   const { staffMembers, studentMembers, loading: teamLoading, refetch: refetchTeam } = useTeamMembers();
@@ -74,6 +75,7 @@ const Admin: React.FC = () => {
   // Modal states
   const [editStatModal, setEditStatModal] = useState<{ isOpen: boolean; stat: Statistic | null }>({ isOpen: false, stat: null });
   const [editHeroModal, setEditHeroModal] = useState(false);
+  const [editTaglinesModal, setEditTaglinesModal] = useState(false);
   const [editAboutModal, setEditAboutModal] = useState(false);
   const [editFooterModal, setEditFooterModal] = useState(false);
   const [teamMemberModal, setTeamMemberModal] = useState<{ isOpen: boolean; member?: TeamMember }>({ isOpen: false });
