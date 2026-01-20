@@ -150,15 +150,29 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ isOpen, on
             </div>
           )}
 
-          {/* Close Button */}
+          {/* Download Rulebook Button */}
           <div className="pt-2">
             <button
-              onClick={onClose}
-              className="w-full px-6 py-3 bg-gray-800 hover:bg-gray-700 text-gray-300 font-oswald text-xs uppercase tracking-[0.3em] rounded-lg transition-colors duration-300 border border-gray-700"
-              data-testid="event-modal-close-btn"
+              onClick={handleDownloadRulebook}
+              disabled={isDownloading}
+              className="w-full px-6 py-4 bg-gradient-to-r from-red-700 to-red-600 hover:from-red-600 hover:to-red-500 text-white font-oswald text-sm uppercase tracking-[0.3em] rounded-lg transition-all duration-300 border border-red-500/50 shadow-lg hover:shadow-red-900/50 flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed"
+              data-testid="download-rulebook-btn"
             >
-              Close
+              {isDownloading ? (
+                <>
+                  <Loader2 className="animate-spin" size={18} />
+                  <span>Downloading...</span>
+                </>
+              ) : (
+                <>
+                  <Download size={18} />
+                  <span>Download Rulebook</span>
+                </>
+              )}
             </button>
+            {downloadError && (
+              <p className="text-red-400 text-xs text-center mt-2">{downloadError}</p>
+            )}
           </div>
         </div>
       </div>
