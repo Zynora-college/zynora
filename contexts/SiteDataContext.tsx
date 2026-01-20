@@ -267,6 +267,14 @@ const transformRawData = (raw: RawSiteData): SiteData => {
   
   return {
     heroContent: transformHeroContent(raw.hero_content),
+    heroTaglines: (raw.hero_taglines || []).map(t => ({
+      id: t.id,
+      tagline_text: t.tagline_text,
+      order: t.order,
+      is_active: t.is_active,
+      created_at: t.created_at,
+      updated_at: t.updated_at,
+    })),
     aboutContent: raw.about_content,
     onboardingContent: transformOnboardingContent(raw.onboarding_content),
     footerContent: transformFooterContent(raw.footer_content),
