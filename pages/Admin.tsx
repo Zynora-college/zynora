@@ -77,6 +77,9 @@ const Admin: React.FC = () => {
   const [eventModal, setEventModal] = useState<{ isOpen: boolean; event?: EventCard }>({ isOpen: false });
   const [galleryUploadModal, setGalleryUploadModal] = useState(false);
   const [documentUploadModal, setDocumentUploadModal] = useState(false);
+  const [editButtonModal, setEditButtonModal] = useState<{ isOpen: boolean; button: any | null }>({ isOpen: false, button: null });
+  const [editSectionModal, setEditSectionModal] = useState<{ isOpen: boolean; section: any | null }>({ isOpen: false, section: null });
+  const [editOnboardingModal, setEditOnboardingModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
     title: string;
