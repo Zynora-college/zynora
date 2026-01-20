@@ -118,6 +118,20 @@ export const useHeroContent = () => {
   };
 };
 
+// Hook for fetching hero taglines
+export const useHeroTaglines = () => {
+  const { data: siteData, loading, error, refetchSection } = useSiteData();
+
+  const refetch = useCallback(() => refetchSection('heroTaglines'), [refetchSection]);
+
+  return {
+    data: siteData?.heroTaglines || [],
+    loading,
+    error,
+    refetch,
+  };
+};
+
 // Hook for fetching about content
 export const useAboutContent = () => {
   const { data: siteData, loading, error, refetchSection } = useSiteData();
