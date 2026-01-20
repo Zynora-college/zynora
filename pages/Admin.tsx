@@ -346,6 +346,50 @@ const Admin: React.FC = () => {
                   </section>
                 )}
 
+                {/* Hero Taglines - Rotating phrases */}
+                <section className="bg-white rounded-lg border border-gray-200 p-6">
+                  <div className="flex justify-between items-center mb-5">
+                    <div className="flex items-center gap-2">
+                      <Type size={20} className="text-gray-700" />
+                      <div>
+                        <h2 className="text-lg font-semibold text-gray-900">Hero Taglines</h2>
+                        <p className="text-xs text-gray-500 mt-0.5">Rotating phrases in hero section ({heroTaglines.length} active)</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setEditTaglinesModal(true)}
+                      className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                      data-testid="taglines-edit-btn"
+                    >
+                      <Edit2 size={16} />
+                      Edit
+                    </button>
+                  </div>
+
+                  <div className="space-y-2">
+                    {heroTaglines.length > 0 ? (
+                      heroTaglines.map((tagline, index) => (
+                        <div
+                          key={tagline.id}
+                          className="flex items-center gap-3 p-3 bg-gray-50 rounded border border-gray-200"
+                          data-testid={`tagline-display-${index}`}
+                        >
+                          <span className="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-semibold min-w-[24px] text-center">
+                            {index + 1}
+                          </span>
+                          <span className="text-sm text-gray-700 font-medium italic">"{tagline.tagline_text}"</span>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-center py-6 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+                        <Type size={32} className="mx-auto text-gray-400 mb-2" />
+                        <p className="text-gray-600 font-medium">No taglines configured</p>
+                        <p className="text-sm text-gray-500 mt-1">Click "Edit" to add rotating taglines</p>
+                      </div>
+                    )}
+                  </div>
+                </section>
+
                 {/* Team Members */}
                 <section className="bg-white rounded-lg border border-gray-200 p-6">
                   <div className="flex justify-between items-center mb-5">
