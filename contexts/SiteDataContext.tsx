@@ -418,6 +418,10 @@ export const SiteDataProvider: React.FC<SiteDataProviderProps> = ({ children }) 
       // Provide minimal fallback data on complete failure
       setData({
         heroContent: { id: '1', title: 'ZYNORA', subtitle: 'Enter the Legends', description: '', primaryButtonText: 'Register Now', secondaryButtonText: 'Learn More' },
+        heroTaglines: [
+          { id: 'tagline-1', tagline_text: 'Enter the Stories. Live the Legends.', order: 1, is_active: true },
+          { id: 'tagline-2', tagline_text: 'We don\'t believe in luck, We believe in hardwork', order: 2, is_active: true },
+        ],
         aboutContent: null,
         onboardingContent: { id: '1', title: 'ZYNORA', subtitle: 'Enter the Legends', buttonText: 'ENTER THE VOID' },
         footerContent: { id: '1', copyrightText: 'ZYNORA CINEMATIC FEST. ALL RIGHTS RESERVED.', note: null },
