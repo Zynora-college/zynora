@@ -109,6 +109,9 @@ const Admin: React.FC = () => {
     { id: "about", label: "About", icon: Info, desc: "About Page" },
     { id: "events", label: "Events", icon: Calendar, desc: "Manage Events" },
     { id: "gallery", label: "Gallery", icon: Image, desc: "Photos" },
+    { id: "buttons", label: "Buttons", icon: Edit2, desc: "Button Text" },
+    { id: "sections", label: "Sections", icon: Film, desc: "Section Content" },
+    { id: "onboarding", label: "Welcome", icon: Plus, desc: "Welcome Screen" },
     { id: "documents", label: "Documents", icon: FileText, desc: "Admin Files" },
   ];
 
