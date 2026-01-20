@@ -522,6 +522,18 @@ export const SiteDataProvider: React.FC<SiteDataProviderProps> = ({ children }) 
           updatedData.heroContent = transformHeroContent(heroData);
           break;
         }
+        case 'heroTaglines': {
+          const { data: taglinesData } = await supabase.from('hero_taglines').select('*').eq('is_active', true).order('order', { ascending: true });
+          updatedData.heroTaglines = (taglinesData || []).map(t => ({
+            id: t.id,
+            tagline_text: t.tagline_text,
+            order: t.order,
+            is_active: t.is_active,
+            created_at: t.created_at,
+            updated_at: t.updated_at,
+          }));
+          break;
+        }
         case 'aboutContent': {
           const { data: aboutData } = await supabase.from('about_content').select('*').single();
           updatedData.aboutContent = aboutData;
