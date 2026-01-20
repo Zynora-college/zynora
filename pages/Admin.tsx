@@ -984,6 +984,33 @@ const Admin: React.FC = () => {
         title={deleteModal.title}
         message={deleteModal.message}
       />
+
+      {editButtonModal.button && (
+        <EditButtonModal
+          isOpen={editButtonModal.isOpen}
+          onClose={() => setEditButtonModal({ isOpen: false, button: null })}
+          button={editButtonModal.button}
+          onSuccess={refetchButtons}
+        />
+      )}
+
+      {editSectionModal.section && (
+        <EditSectionModal
+          isOpen={editSectionModal.isOpen}
+          onClose={() => setEditSectionModal({ isOpen: false, section: null })}
+          section={editSectionModal.section}
+          onSuccess={refetchSections}
+        />
+      )}
+
+      {onboardingContent && (
+        <EditOnboardingModal
+          isOpen={editOnboardingModal}
+          onClose={() => setEditOnboardingModal(false)}
+          onboarding={onboardingContent}
+          onSuccess={refetchOnboarding}
+        />
+      )}
     </div>
   );
 };
