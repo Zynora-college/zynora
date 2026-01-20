@@ -760,6 +760,156 @@ const Admin: React.FC = () => {
                 </section>
               </div>
             )}
+
+            {/* BUTTONS SECTION */}
+            {activeSection === "buttons" && (
+              <div className="space-y-6" data-testid="admin-section-buttons">
+                <section className="bg-white rounded-lg border border-gray-200 p-6">
+                  <div className="flex justify-between items-center mb-5">
+                    <div className="flex items-center gap-2">
+                      <Edit2 size={20} className="text-gray-700" />
+                      <div>
+                        <h2 className="text-lg font-semibold text-gray-900">Button Labels</h2>
+                        <p className="text-xs text-gray-500 mt-0.5">Edit button text across the website</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => refetchButtons()}
+                      className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors"
+                    >
+                      <RefreshCw size={16} />
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {buttonLabels.map((button) => (
+                      <div
+                        key={button.id}
+                        className="bg-white rounded-lg p-4 border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all"
+                        data-testid={`button-card-${button.key}`}
+                      >
+                        <div className="mb-3">
+                          <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+                            {button.key}
+                          </div>
+                          <div className="text-sm font-medium text-gray-900">{button.text}</div>
+                        </div>
+                        <button
+                          onClick={() => setEditButtonModal({ isOpen: true, button })}
+                          className="w-full flex items-center justify-center gap-1.5 bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-600 px-3 py-2 rounded text-xs font-medium transition-colors border border-gray-200 hover:border-blue-300"
+                          data-testid={`button-edit-${button.key}`}
+                        >
+                          <Edit2 size={14} />
+                          Edit
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              </div>
+            )}
+
+            {/* SECTIONS SECTION */}
+            {activeSection === "sections" && (
+              <div className="space-y-6" data-testid="admin-section-sections">
+                <section className="bg-white rounded-lg border border-gray-200 p-6">
+                  <div className="flex justify-between items-center mb-5">
+                    <div className="flex items-center gap-2">
+                      <Film size={20} className="text-gray-700" />
+                      <div>
+                        <h2 className="text-lg font-semibold text-gray-900">Section Content</h2>
+                        <p className="text-xs text-gray-500 mt-0.5">Edit labels, titles, and descriptions for website sections</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => refetchSections()}
+                      className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors"
+                    >
+                      <RefreshCw size={16} />
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-3">
+                    {sectionContent.map((section) => (
+                      <div
+                        key={section.id}
+                        className="bg-white rounded-lg p-4 border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all"
+                        data-testid={`section-card-${section.section_key}`}
+                      >
+                        <div className="flex justify-between items-start mb-3">
+                          <div className="flex-1">
+                            <div className="text-xs font-semibold text-blue-600 uppercase tracking-wide mb-2">
+                              {section.section_key}
+                            </div>
+                            {section.label && (
+                              <div className="text-xs text-gray-500 mb-1">Label: {section.label}</div>
+                            )}
+                            <div className="text-sm font-semibold text-gray-900 mb-1">{section.title}</div>
+                            {section.description && (
+                              <div className="text-xs text-gray-600">{section.description}</div>
+                            )}
+                          </div>
+                          <button
+                            onClick={() => setEditSectionModal({ isOpen: true, section })}
+                            className="flex items-center gap-1.5 bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-600 px-3 py-2 rounded text-xs font-medium transition-colors border border-gray-200 hover:border-blue-300"
+                            data-testid={`section-edit-${section.section_key}`}
+                          >
+                            <Edit2 size={14} />
+                            Edit
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              </div>
+            )}
+
+            {/* ONBOARDING SECTION */}
+            {activeSection === "onboarding" && onboardingContent && (
+              <div className="space-y-6" data-testid="admin-section-onboarding">
+                <section className="bg-white rounded-lg border border-gray-200 p-6">
+                  <div className="flex justify-between items-center mb-5">
+                    <div className="flex items-center gap-2">
+                      <Plus size={20} className="text-gray-700" />
+                      <div>
+                        <h2 className="text-lg font-semibold text-gray-900">Welcome Screen</h2>
+                        <p className="text-xs text-gray-500 mt-0.5">Onboarding content shown on first visit</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setEditOnboardingModal(true)}
+                      className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                      data-testid="onboarding-edit-btn"
+                    >
+                      <Edit2 size={16} />
+                      Edit
+                    </button>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded border border-gray-200">
+                      <div className="flex-1">
+                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Title</label>
+                        <div className="text-base font-semibold text-gray-900 mt-1">{onboardingContent.title}</div>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded border border-gray-200">
+                      <div className="flex-1">
+                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Subtitle</label>
+                        <div className="text-sm text-gray-700 mt-1">{onboardingContent.subtitle}</div>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded border border-gray-200">
+                      <div className="flex-1">
+                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Button Text</label>
+                        <div className="text-sm font-medium text-blue-600 mt-1">{onboardingContent.buttonText}</div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            )}
           </>
         )}
       </main>
