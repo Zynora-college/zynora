@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import CornerStrings from "../components/ui/CornerStrings";
 import { TAGLINES } from "../constants";
-import { useHeroContent } from "../hooks/useSupabaseData";
+import { useHeroContent, useHeroTaglines } from "../hooks/useSupabaseData";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
@@ -12,8 +12,17 @@ const Hero: React.FC = () => {
   const [taglineIndex, setTaglineIndex] = useState(0);
   const [fadeStatus, setFadeStatus] = useState(true);
   const { data: heroContent, loading, error } = useHeroContent();
+  const { data: heroTaglines } = useHeroTaglines();
   const isMobile = useIsMobile();
   const prefersReducedMotion = useReducedMotion();
+
+  // Use taglines from Supabase if available, fallback to constants
+  const taglines = useMemo(() => {
+    if (heroTaglines && heroTaglines.length > 0) {
+      return heroTaglines.map(t => t.tagline_text);
+    }
+    return TAGLINES;
+  }, [heroTaglines]);
 
   // Use fallback content to prevent blocking on mobile
   const content = heroContent || {
