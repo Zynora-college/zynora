@@ -167,8 +167,18 @@ interface RawGalleryImage {
   created_at: string;
 }
 
+interface RawHeroTagline {
+  id: string;
+  tagline_text: string;
+  order: number;
+  is_active: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
 interface RawSiteData {
   hero_content: RawHeroContent | null;
+  hero_taglines?: RawHeroTagline[];
   about_content: AboutContent | null;
   onboarding_content: RawOnboardingContent | null;
   footer_content: RawFooterContent | null;
