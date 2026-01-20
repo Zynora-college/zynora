@@ -35,17 +35,17 @@ const Hero: React.FC = () => {
 
   // Skip tagline animation on mobile to reduce CPU usage
   useEffect(() => {
-    if (isMobile) return;
+    if (isMobile || taglines.length <= 1) return;
     
     const interval = setInterval(() => {
       setFadeStatus(false);
       setTimeout(() => {
-        setTaglineIndex((prev) => (prev + 1) % TAGLINES.length);
+        setTaglineIndex((prev) => (prev + 1) % taglines.length);
         setFadeStatus(true);
       }, 1000);
     }, 6000);
     return () => clearInterval(interval);
-  }, [isMobile]);
+  }, [isMobile, taglines.length]);
 
   const handleLogoClick = () => {
     if (isGlitching) return;
