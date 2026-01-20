@@ -64,6 +64,9 @@ const Admin: React.FC = () => {
   const { data: galleryImages, loading: galleryLoading, refetch: refetchGallery } = useGalleryImages();
   const { data: footerContent, loading: footerLoading, refetch: refetchFooter } = useFooterContent();
   const { data: adminDocuments, loading: documentsLoading, refetch: refetchDocuments } = useAdminDocuments();
+  const { data: buttonLabels, loading: buttonsLoading, refetch: refetchButtons } = useButtonLabels();
+  const { data: sectionContent, loading: sectionsLoading, refetch: refetchSections } = useSectionContent();
+  const { data: onboardingContent, loading: onboardingLoading, refetch: refetchOnboarding } = useOnboardingContent();
 
   // Modal states
   const [editStatModal, setEditStatModal] = useState<{ isOpen: boolean; stat: Statistic | null }>({ isOpen: false, stat: null });
