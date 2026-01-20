@@ -205,8 +205,9 @@ const Hero: React.FC = () => {
                 ? '' 
                 : `animate-pulse transition-all duration-1000 ${fadeStatus ? "opacity-80 translate-y-0" : "opacity-0 translate-y-2"}`
             }`}
+            data-testid="hero-tagline"
           >
-            {TAGLINES[taglineIndex]}
+            {taglines[taglineIndex % taglines.length]}
           </p>
           <p className="font-inter text-gray-400 text-sm md:text-lg max-w-xl font-light leading-relaxed tracking-wide">
             {content.subtitle}
