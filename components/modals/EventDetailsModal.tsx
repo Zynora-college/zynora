@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X, ExternalLink } from 'lucide-react';
+import { X, ExternalLink, Download, Loader2 } from 'lucide-react';
 import type { EventCard } from '../../types';
+import { supabase } from '../../lib/supabase';
 
 interface EventDetailsModalProps {
   isOpen: boolean;
@@ -10,10 +11,14 @@ interface EventDetailsModalProps {
 }
 
 export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ isOpen, onClose, event }) => {
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState<string | null>(null);
+
   // Prevent body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      setDownloadError(null);
     } else {
       document.body.style.overflow = 'unset';
     }
@@ -22,6 +27,53 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ isOpen, on
       document.body.style.overflow = 'unset';
     };
   }, [isOpen]);
+
+  const handleDownloadRulebook = async () => {
+    setIsDownloading(true);
+    setDownloadError(null);
+    
+    try {
+      // List files in admin-documents bucket to get the rulebook
+      const { data: files, error: listError } = await supabase.storage
+        .from('admin-documents')
+        .list('', {
+          limit: 1,
+          sortBy: { column: 'created_at', order: 'desc' },
+        });
+
+      if (listError) throw listError;
+
+      if (!files || files.length === 0) {
+        setDownloadError('No rulebook available yet');
+        return;
+      }
+
+      const rulebook = files[0];
+      
+      // Create a signed URL for the private document (valid for 1 hour)
+      const { data: signedUrlData, error: signedUrlError } = await supabase.storage
+        .from('admin-documents')
+        .createSignedUrl(rulebook.name, 3600);
+
+      if (signedUrlError) throw signedUrlError;
+
+      if (signedUrlData?.signedUrl) {
+        // Create a temporary link and trigger download
+        const link = document.createElement('a');
+        link.href = signedUrlData.signedUrl;
+        link.download = rulebook.name;
+        link.target = '_blank';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    } catch (err: any) {
+      console.error('Error downloading rulebook:', err);
+      setDownloadError(err.message || 'Failed to download rulebook');
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   if (!isOpen) return null;
 
