@@ -197,7 +197,7 @@ const Admin: React.FC = () => {
     });
   };
 
-  const isLoading = heroLoading || aboutLoading || statsLoading || teamLoading || eventsLoading || galleryLoading || footerLoading || documentsLoading;
+  const isLoading = heroLoading || aboutLoading || statsLoading || teamLoading || eventsLoading || galleryLoading || footerLoading || documentsLoading || buttonsLoading || sectionsLoading || onboardingLoading;
 
   return (
     <div className="min-h-screen bg-gray-50">
