@@ -453,6 +453,7 @@ export const SiteDataProvider: React.FC<SiteDataProviderProps> = ({ children }) 
         supabase.from('about_content').select('*').single(),
         supabase.from('onboarding_content').select('*').single(),
         supabase.from('footer_content').select('*').single(),
+        supabase.from('hero_taglines').select('*').eq('is_active', true).order('order', { ascending: true }),
       ]);
 
       // Batch 2: Lists
@@ -485,12 +486,13 @@ export const SiteDataProvider: React.FC<SiteDataProviderProps> = ({ children }) 
         supabase.from('gallery_images').select('*').order('order', { ascending: true }),
       ]);
 
-      const [heroRes, aboutRes, onboardingRes, footerRes] = batch1Results;
+      const [heroRes, aboutRes, onboardingRes, footerRes, taglinesRes] = batch1Results;
       const [statsRes, teamRes, sectionsRes, buttonsRes] = batch2Results;
       const [eventsRes, galleryRes] = batch3Results;
 
       const rawData: RawSiteData = {
         hero_content: heroRes.data,
+        hero_taglines: taglinesRes.data || [],
         about_content: aboutRes.data,
         onboarding_content: onboardingRes.data,
         footer_content: footerRes.data,
