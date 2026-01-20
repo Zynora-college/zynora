@@ -31,6 +31,9 @@ import {
   useFooterContent,
   useAdminDocuments,
   useStorageOperations,
+  useButtonLabels,
+  useSectionContent,
+  useOnboardingContent,
 } from "../hooks/useSupabaseData";
 import { EditStatModal } from "../components/modals/EditStatModal";
 import { EditHeroModal } from "../components/modals/EditHeroModal";
@@ -41,6 +44,9 @@ import { GalleryUploadModal } from "../components/modals/GalleryUploadModal";
 import { EditFooterModal } from "../components/modals/EditFooterModal";
 import { DeleteConfirmModal } from "../components/modals/DeleteConfirmModal";
 import { DocumentUploadModal } from "../components/modals/DocumentUploadModal";
+import { EditButtonModal } from "../components/modals/EditButtonModal";
+import { EditSectionModal } from "../components/modals/EditSectionModal";
+import { EditOnboardingModal } from "../components/modals/EditOnboardingModal";
 import { supabase } from "../lib/supabase";
 import type { TeamMember, Statistic, EventCard, GalleryImage } from "../types";
 
