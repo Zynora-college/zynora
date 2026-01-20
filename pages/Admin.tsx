@@ -18,6 +18,7 @@ import {
   Loader2,
   RefreshCw,
   Star,
+  Type,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import AdminLogin from "../components/AdminLogin";
@@ -34,6 +35,7 @@ import {
   useButtonLabels,
   useSectionContent,
   useOnboardingContent,
+  useHeroTaglines,
 } from "../hooks/useSupabaseData";
 import { EditStatModal } from "../components/modals/EditStatModal";
 import { EditHeroModal } from "../components/modals/EditHeroModal";
@@ -47,6 +49,7 @@ import { DocumentUploadModal } from "../components/modals/DocumentUploadModal";
 import { EditButtonModal } from "../components/modals/EditButtonModal";
 import { EditSectionModal } from "../components/modals/EditSectionModal";
 import { EditOnboardingModal } from "../components/modals/EditOnboardingModal";
+import { EditTaglinesModal } from "../components/modals/EditTaglinesModal";
 import { supabase } from "../lib/supabase";
 import type { TeamMember, Statistic, EventCard, GalleryImage } from "../types";
 
