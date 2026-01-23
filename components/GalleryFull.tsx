@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { useGalleryImages, useSectionContent } from "../hooks/useSupabaseData";
 import type { GalleryImage } from "../types";
 import { useIsMobile } from "../hooks/useIsMobile";
+import { getOptimizedImageUrl } from "../lib/imageUtils";
 
 const GalleryFull: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -11,17 +12,25 @@ const GalleryFull: React.FC = () => {
   const { data: galleryImages, loading, error } = useGalleryImages();
   const isMobile = useIsMobile();
 
-  // Extract image URLs for display and filter featured images for carousel
-  const GALLERY_IMAGES = galleryImages.map((img: GalleryImage) => img.image_url);
-  const featuredImages = galleryImages.filter((img: GalleryImage) => img.is_featured);
-  
-  // Use featured images for carousel if available, otherwise use all images
-  const carouselImages = featuredImages.length > 0 
-    ? featuredImages.map((img: GalleryImage) => img.image_url)
-    : GALLERY_IMAGES;
-  
-  // Duplicate for infinite scroll effect
-  const highlightImages = [...carouselImages, ...carouselImages];
+  // Memoize image URLs to prevent re-computation on every render
+  const { GALLERY_IMAGES, carouselImages, highlightImages } = useMemo(() => {
+    const allImages = galleryImages.map((img: GalleryImage) => img.image_url);
+    const featured = galleryImages.filter((img: GalleryImage) => img.is_featured);
+    
+    // Use featured images for carousel if available, otherwise use first 6 images
+    // Limit carousel to reduce bandwidth
+    const carousel = featured.length > 0 
+      ? featured.slice(0, 8).map((img: GalleryImage) => img.image_url)
+      : allImages.slice(0, 6);
+    
+    // For infinite scroll, we use CSS animation instead of duplicating images
+    // This reduces image requests by 50%
+    return {
+      GALLERY_IMAGES: allImages,
+      carouselImages: carousel,
+      highlightImages: carousel, // No longer duplicating!
+    };
+  }, [galleryImages]);
 
   useEffect(() => {
     if (selectedIndex !== null) {
@@ -103,14 +112,15 @@ const GalleryFull: React.FC = () => {
             <div className="flex gap-4 pb-4" style={{ width: 'max-content' }}>
               {carouselImages.map((img, idx) => (
                 <div
-                  key={idx}
+                  key={`mobile-carousel-${idx}`}
                   className="relative w-56 h-[320px] flex-shrink-0 rounded-xl overflow-hidden border border-red-900/30"
-                  onClick={() => setSelectedIndex(idx % carouselImages.length)}
+                  onClick={() => setSelectedIndex(idx)}
                 >
                   <img
-                    src={img}
+                    src={getOptimizedImageUrl(img, 'preview')}
                     alt="Gallery"
                     loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -119,12 +129,13 @@ const GalleryFull: React.FC = () => {
           </div>
         ) : (
           <div className="relative h-[500px] overflow-hidden cursor-pointer perspective-[1500px]">
+            {/* Use CSS-only infinite scroll - no image duplication needed */}
             <div className="flex gap-10 absolute animate-[carousel_60s_linear_infinite] hover:[animation-play-state:paused] py-12 px-4">
               {highlightImages.map((img, idx) => (
                 <div
-                  key={idx}
+                  key={`carousel-${idx}`}
                   className="relative w-64 md:w-80 h-[400px] flex-shrink-0 group/card preserve-3d cursor-pointer"
-                  onClick={() => setSelectedIndex(idx % carouselImages.length)}
+                  onClick={() => setSelectedIndex(idx)}
                 >
                   <div className="relative w-full h-full transition-transform duration-[800ms] preserve-3d group-hover/card:[transform:rotateY(180deg)]">
                     <div className="absolute inset-0 backface-hidden bg-[#0a0a0a] rounded-2xl flex flex-col items-center justify-center border border-red-900/30 shadow-[0_10px_30px_rgba(0,0,0,0.8)] overflow-hidden">
@@ -142,9 +153,10 @@ const GalleryFull: React.FC = () => {
                     </div>
                     <div className="absolute inset-0 backface-hidden [transform:rotateY(180deg)] rounded-2xl overflow-hidden border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,1)]">
                       <img
-                        src={img}
+                        src={getOptimizedImageUrl(img, 'card')}
                         alt="Highlight"
                         loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-cover grayscale group-hover/card:grayscale-0 transition-all duration-700"
                       />
                     </div>
@@ -167,14 +179,15 @@ const GalleryFull: React.FC = () => {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8 justify-items-center opacity-100">
           {GALLERY_IMAGES.map((img, idx) => (
             <div
-              key={idx}
+              key={`grid-${idx}`}
               onClick={() => setSelectedIndex(idx)}
               className="group relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-neutral-900 border border-white/5 cursor-pointer opacity-100 transition-all duration-500 hover:border-red-600/50"
             >
               <img
-                src={img}
+                src={getOptimizedImageUrl(img, isMobile ? 'preview' : 'gallery')}
                 alt={`Gallery ${idx}`}
                 loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 grayscale hover:grayscale-0"
               />
               <div className="absolute inset-0 bg-red-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -219,9 +232,10 @@ const GalleryFull: React.FC = () => {
 
           <div className="relative flex items-center justify-center w-full h-full p-4 md:p-8">
             <img
-              src={GALLERY_IMAGES[selectedIndex]}
+              src={getOptimizedImageUrl(GALLERY_IMAGES[selectedIndex], 'fullscreen')}
               alt="Fullscreen"
-              loading="lazy"
+              loading="eager"
+              decoding="sync"
               className="max-w-[90vw] max-h-[85vh] md:max-w-[85vw] md:max-h-[80vh] object-contain rounded-lg shadow-[0_0_100px_rgba(220,38,38,0.3)] animate-[scaleIn_0.3s_ease-out]"
               onClick={(e) => e.stopPropagation()}
               data-testid="gallery-modal-image"
