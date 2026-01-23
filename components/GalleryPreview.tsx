@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useGalleryImages, useSectionContent, useButtonLabels } from "../hooks/useSupabaseData";
 import type { GalleryImage } from "../types";
+import { getOptimizedImageUrl } from "../lib/imageUtils";
 
 const GalleryPreview: React.FC = () => {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ const GalleryPreview: React.FC = () => {
   const { data: galleryImages, loading, error } = useGalleryImages();
   
   // Extract image URLs and show only the first 8 images in the preview
+  // Use optimized thumbnail size for preview grid
   const previewImages = galleryImages.slice(0, 8).map((img: GalleryImage) => img.image_url);
 
   // Loading state
@@ -48,12 +50,14 @@ const GalleryPreview: React.FC = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-16 animate-[fadeInUp_1s_ease-out]">
           {previewImages.map((img, idx) => (
             <div
-              key={idx}
+              key={`preview-${idx}`}
               className="group relative aspect-[3/4] overflow-hidden rounded-lg bg-neutral-900 border border-white/5"
             >
               <img
-                src={img}
+                src={getOptimizedImageUrl(img, 'thumbnail')}
                 alt={`Preview ${idx}`}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-red-900/10 opacity-0 group-hover:opacity-100 transition-opacity" />
