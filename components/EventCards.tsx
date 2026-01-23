@@ -3,6 +3,7 @@ import { EventCard } from "../types";
 import CornerStrings from "../components/ui/CornerStrings";
 import { useEvents, useSectionContent, useButtonLabels } from "../hooks/useSupabaseData";
 import { EventDetailsModal } from "./modals/EventDetailsModal";
+import { getOptimizedImageUrl } from "../lib/imageUtils";
 
 const Card: React.FC<{ event: EventCard; index: number; secureEntryText: string; onSecureClick: () => void }> = ({
   event,
@@ -43,8 +44,10 @@ const Card: React.FC<{ event: EventCard; index: number; secureEntryText: string;
     >
       <div className="relative aspect-[16/10] overflow-hidden">
         <img
-          src={event.image}
+          src={getOptimizedImageUrl(event.image, 'card')}
           alt={event.title}
+          loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover transition-all duration-[800ms] grayscale group-hover:grayscale-0 contrast-125 brightness-75 group-hover:brightness-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40" />
