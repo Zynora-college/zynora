@@ -51,6 +51,9 @@ export const parseSupabaseUrl = (url: string): { bucket: string; path: string } 
 /**
  * Get optimized image URL with Supabase transformations
  * Falls back to original URL for non-Supabase images
+ * 
+ * NOTE: Supabase Image Transformations require a paid plan.
+ * For free tier, we return the original URL without transformations.
  */
 export const getOptimizedImageUrl = (
   originalUrl: string,
@@ -58,7 +61,7 @@ export const getOptimizedImageUrl = (
 ): string => {
   if (!originalUrl) return '';
   
-  // If not a Supabase storage URL, return as-is (e.g., Unsplash URLs)
+  // If not a Supabase storage URL, check for other optimizations
   if (!isSupabaseStorageUrl(originalUrl)) {
     // For Unsplash, we can append size params
     if (originalUrl.includes('unsplash.com')) {
@@ -69,25 +72,10 @@ export const getOptimizedImageUrl = (
     return originalUrl;
   }
   
-  // Parse Supabase URL
-  const parsed = parseSupabaseUrl(originalUrl);
-  if (!parsed) return originalUrl;
-  
-  // Get size configuration
-  const sizeConfig = typeof size === 'string' ? IMAGE_SIZES[size] : size;
-  
-  // Generate transformed URL using Supabase's render endpoint
-  // Supabase Image Transformation: /render/image/[bucket]/[path]
-  const transformParams = new URLSearchParams();
-  if (sizeConfig.width) transformParams.set('width', sizeConfig.width.toString());
-  if (sizeConfig.height) transformParams.set('height', sizeConfig.height.toString());
-  if (sizeConfig.quality) transformParams.set('quality', sizeConfig.quality.toString());
-  transformParams.set('format', sizeConfig.format || 'webp');
-  
-  // Construct the transformed URL
-  // Note: Supabase uses /render/image endpoint for transformations
-  const baseUrl = originalUrl.split('/storage/v1/object/public/')[0];
-  return `${baseUrl}/storage/v1/render/image/public/${parsed.bucket}/${parsed.path}?${transformParams.toString()}`;
+  // For Supabase storage URLs, return the original URL directly
+  // Image transformations via /render/image endpoint require a paid Supabase plan
+  // To avoid broken images, we serve the original unoptimized image
+  return originalUrl;
 };
 
 /**
